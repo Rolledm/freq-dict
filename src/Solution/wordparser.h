@@ -3,12 +3,12 @@
 
 #include <fstream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 namespace Solution {
 
     struct CTreeNode {
-        std::map<char, CTreeNode*> next;
+        std::unordered_map<char, CTreeNode*> next;
         int count = 0;
     };
 

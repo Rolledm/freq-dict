@@ -2,6 +2,7 @@
 #include "../Utility/logger.h"
 #include <algorithm>
 
+#include <iostream>
 
 namespace Solution {
 
@@ -31,20 +32,23 @@ namespace Solution {
         const int offset = 'a' - 'A';
         CTreeNode* node = m_root;
 
-        while (m_inFile.get(c)) {
-            // normalize
-            if (c >= 'A' && c <= 'Z') {
-                c += offset;
-            }
-            if (c >= 'a' && c <= 'z') { //< add letter to word in tree
-                if(node->next.find(c) == node->next.end()) {
-                    node->next[c] = new CTreeNode();
+        std::string str;
+        while(std::getline(m_inFile, str)) {
+            for (char& c : str) {
+                // normalize
+                if (c >= 'A' && c <= 'Z') {
+                    c += offset;
                 }
-                node = node->next[c];
-            } else if (node != m_root) { //< parse end of word
-                node->count++;
-                node = m_root;
-            } //< ignore trash
+                if (c >= 'a' && c <= 'z') { //< add letter to word in tree
+                    if(node->next.find(c) == node->next.end()) {
+                        node->next[c] = new CTreeNode();
+                    }
+                    node = node->next[c];
+                } else if (node != m_root) { //< parse end of word
+                    node->count++;
+                    node = m_root;
+                } //< ignore trash
+            }
         }
     }
 
