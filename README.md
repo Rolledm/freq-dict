@@ -18,7 +18,7 @@ Usage: ./freq [OPTIONS] in.txt out.txt
     Override output file if exists. By default, program will exit.
 
 Tested speed:
-* i7 3770k in wsl2 ~750k words/second
+* i7 3770k in wsl2 ~3.3M words/second
 
 Example:
 ~~~
@@ -31,7 +31,7 @@ Freeing memory...
 Finished!
 
 ________________________________________________________
-Executed in   81.33 secs   fish           external
-   usr time   78.87 secs  251.00 micros   78.87 secs
-   sys time    2.46 secs  354.00 micros    2.46 secs
+Executed in   16.68 secs   fish           external
+   usr time   15.97 secs  216.00 micros   15.97 secs
+   sys time    0.71 secs  334.00 micros    0.71 secs
 ~~~

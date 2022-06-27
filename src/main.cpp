@@ -44,6 +44,7 @@ int help() {
 }
 
 int main(int argc, char** argv) {
+    std::ios_base::sync_with_stdio(false);
     Utility::AppSettings settings;
     _LOGGER.ChangeLogStrategy(std::make_shared<Utility::CSilentLogStrategy>());
     ArgsRC rc = ParseArgs(argc, argv, settings);
