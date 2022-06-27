@@ -3,6 +3,37 @@
 #include <map>
 #include <algorithm>
 #include <vector>
+#include <string>
+#include "./Utility/settings.h"
+#include "./Utility/logger.h"
+
+enum class ArgsRC {
+    OK,
+    NEED_FORCE,
+    NEED_HELP,
+    TOO_MUCH
+};
+
+ArgsRC ParseArgs(int argc, char** argv, Utility::AppSettings& settings) {
+    int filledFilesCount = 0;
+    for (int i = 1; i < argc; i++) {
+        if (argv[i] == "-f") {
+            settings.force = true;
+        } else if (argv[i] == "-v") {
+            settings.verbose = true;
+        } else if (argv[i] == "-h") {
+            return ArgsRC::NEED_HELP;
+        } else if (filledFilesCount == 0) {
+            settings.inFilename = argv[i];
+        } else if (filledFilesCount == 1) {
+            settings.outFilename = argv[i];
+        } else {
+            return ArgsRC::TOO_MUCH;
+        }
+    }
+    return ArgsRC::OK;
+}
+
 
 class CParserForest {
 
@@ -26,9 +57,17 @@ void PrepareDict(std::string str, CTreeNode* node) {
     }
 }
 
-
+void FreeData(CTreeNode* node) {
+    for (auto iter: node->next) {
+        FreeData(iter.second);
+    }
+    delete node;
+}
 
 int main(int argc, char** argv) {
+    Utility::CLogger::GetInstance().ChangeLogStrategy(std::make_shared<Utility::CSilentLogStrategy>());
+    Utility::CLogger::GetInstance().Log(Utility::etSeverity::INFO, "uiwehguiehw");
+
 
     //parse args adequate
     std::string in = "huge.txt";
@@ -75,7 +114,7 @@ int main(int argc, char** argv) {
             return l.first > r.first;
         }
 
-        return l.second.compare(r.second) > 0;
+        return l.second.compare(r.second) < 0;
     });
 
     std::cout << "Done. Dumping to file..." << std::endl;
@@ -86,10 +125,11 @@ int main(int argc, char** argv) {
         outFile << iter.first << " " << iter.second << std::endl;
     }
 
-    std::cout << "Done." << std::endl;
+    std::cout << "Done. Freeing resources..." << std::endl;
+
+    FreeData(root);
 
     // close file
-    // free
 
     return 0;
 }
