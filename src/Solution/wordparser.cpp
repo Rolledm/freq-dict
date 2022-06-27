@@ -1,26 +1,29 @@
 #include "./wordparser.h"
-
+#include "../Utility/logger.h"
 #include <algorithm>
-#include<iostream> //remove
 
 
 namespace Solution {
 
     void CParserForest::SolveText() {
-        std::cout << "Parsing file..." << std::endl;
+        _LOGGER.Log(Utility::etSeverity::INFO, "Parsing file...");
         ParseFile();
-        std::cout << "File parsed. Preparing output..." << std::endl;
+        _LOGGER.Log(Utility::etSeverity::INFO, "File parsed. Preparing output...");
         PrepareDict("", m_root);
-        std::cout << "Done. Sorting..." << std::endl;
+        _LOGGER.Log(Utility::etSeverity::INFO, "Done. Sorting...");
         std::sort(m_dict.begin(), m_dict.end(), [](const std::pair<int, std::string>& l, const std::pair<int, std::string>& r) {
             if (l.first != r.first) {
                 return l.first > r.first;
             }
             return l.second.compare(r.second) < 0;
         });
-        std::cout << "Done. Dumping to file..." << std::endl;
+        _LOGGER.Log(Utility::etSeverity::INFO, "Done. Dumping to file...");
         SaveToFile();
+        _LOGGER.Log(Utility::etSeverity::INFO, "Freeing memory...");
         FreeData(m_root);
+        m_inFile.close();
+        m_outFile.close();
+        _LOGGER.Log(Utility::etSeverity::INFO, "Finished!");
     }
 
     void CParserForest::ParseFile() {

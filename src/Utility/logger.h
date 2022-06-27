@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 
+#define _LOGGER Utility::CLogger::GetInstance()
+
 namespace Utility {
     enum class etSeverity {
         INFO,
