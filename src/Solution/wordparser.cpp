@@ -7,7 +7,6 @@
 namespace Solution {
 
     void CParserForest::SolveText() {
-        _LOGGER.Log(Utility::etSeverity::INFO, "Parsing file...");
         ParseFile();
         _LOGGER.Log(Utility::etSeverity::INFO, "File parsed. Preparing output...");
         PrepareDict("", m_root);
@@ -18,7 +17,6 @@ namespace Solution {
             }
             return l.second.compare(r.second) < 0;
         });
-        _LOGGER.Log(Utility::etSeverity::INFO, "Done. Dumping to file...");
         SaveToFile();
         _LOGGER.Log(Utility::etSeverity::INFO, "Freeing memory...");
         FreeData(m_root);
@@ -28,6 +26,7 @@ namespace Solution {
     }
 
     void CParserForest::ParseFile() {
+        _LOGGER.Log(Utility::etSeverity::INFO, "Parsing file...");
         char c;
         const int offset = 'a' - 'A';
         CTreeNode* node = m_root;
@@ -40,7 +39,8 @@ namespace Solution {
                     c += offset;
                 }
                 if (c >= 'a' && c <= 'z') { //< add letter to word in tree
-                    if(node->next.find(c) == node->next.end()) {
+                    c -= 'a';
+                    if(!node->next[c]) {
                         node->next[c] = new CTreeNode();
                     }
                     node = node->next[c];
@@ -57,20 +57,25 @@ namespace Solution {
             m_dict.emplace_back(node->count, str);
         }
 
-        for (auto iter : node->next) {
-            PrepareDict(str + iter.first, iter.second);
+        for (int i = 0; i < MAX_ARR_VAL; i++) {
+            if (node->next[i]) {
+                PrepareDict(str + char(i + 'a'), node->next[i]);
+            }
         }
     }
 
     void CParserForest::SaveToFile() {
+        _LOGGER.Log(Utility::etSeverity::INFO, "Done. Dumping to file...");
         for (const auto& iter : m_dict) {
             m_outFile << iter.first << " " << iter.second << std::endl;
         }
     }
 
     void CParserForest::FreeData(CTreeNode* node) {
-        for (auto iter: node->next) {
-            FreeData(iter.second);
+        for (int i = 0; i < MAX_ARR_VAL; i++) {
+            if (node->next[i]) {
+                FreeData(node->next[i]);
+            }
         }
         delete node;
     }

@@ -7,8 +7,10 @@
 
 namespace Solution {
 
+    const int MAX_ARR_VAL = 26;
+
     struct CTreeNode {
-        std::unordered_map<char, CTreeNode*> next;
+        CTreeNode* next[MAX_ARR_VAL];
         int count = 0;
     };
 
