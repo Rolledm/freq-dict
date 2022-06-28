@@ -18,11 +18,19 @@ Usage: ./freq [OPTIONS] in.txt out.txt
     Override output file if exists. By default, program will exit.
 
 Tested speed:
-* i7 3770k in wsl2 ~3.3M words/second
+* i7 3770k in wsl2 ~16M words/second
 
 Example:
 ~~~
-> time ./freq huge.txt out.txt -f -v
+rolledm@rolledm ~/r/f/bin (develop)> time wc huge.txt
+  6455997  57474834 336183276 huge.txt
+
+________________________________________________________
+Executed in    2.34 secs   fish           external
+   usr time    2.28 secs  271.00 micros    2.28 secs
+   sys time    0.06 secs  459.00 micros    0.06 secs
+
+rolledm@rolledm ~/r/f/bin (develop)> time ./freq huge.txt out.txt -f -v
 Parsing file...
 File parsed. Preparing output...
 Done. Sorting...
@@ -31,7 +39,7 @@ Freeing memory...
 Finished!
 
 ________________________________________________________
-Executed in   16.68 secs   fish           external
-   usr time   15.97 secs  216.00 micros   15.97 secs
-   sys time    0.71 secs  334.00 micros    0.71 secs
+Executed in    3.57 secs   fish           external
+   usr time    2.92 secs  285.00 micros    2.92 secs
+   sys time    0.64 secs  484.00 micros    0.64 secs
 ~~~
